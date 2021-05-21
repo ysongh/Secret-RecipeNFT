@@ -1,30 +1,30 @@
 const {
-  EnigmaUtils, Secp256k1Pen, SigningCosmWasmClient, pubkeyToAddress, encodeSecp256k1Pubkey,
-} = require('secretjs');
+  EnigmaUtils, Secp256k1Pen, SigningCosmWasmClient, pubkeyToAddress, encodeSecp256k1Pubkey
+} = require("secretjs");
   
 const fs = require('fs');
 require('dotenv').config();
 
 const customFees = {
   upload: {
-    amount: [{ amount: '2000000', denom: 'uscrt' }],
-    gas: '2000000',
-  },
-  init: {
-    amount: [{ amount: '500000', denom: 'uscrt' }],
-    gas: '500000',
-  },
-  exec: {
-    amount: [{ amount: '500000', denom: 'uscrt' }],
-    gas: '500000',
-  },
-  send: {
-    amount: [{ amount: '80000', denom: 'uscrt' }],
-    gas: '80000',
-  },
+    amount: [{ amount: "3000000", denom: "uscrt" }],
+    gas: "3000000",
+},
+init: {
+    amount: [{ amount: "500000", denom: "uscrt" }],
+    gas: "500000",
+},
+exec: {
+    amount: [{ amount: "500000", denom: "uscrt" }],
+    gas: "500000",
+},
+send: {
+    amount: [{ amount: "80000", denom: "uscrt" }],
+    gas: "80000",
+},
 };
 
-const main = async () => {
+const deploy = async () => {
   const httpUrl = process.env.SECRET_REST_URL;
   const mnemonic = process.env.MNEMONIC;
 
@@ -45,7 +45,7 @@ const main = async () => {
   console.log(`Wallet address=${accAddress}`);
 
   // Upload the contract wasm
-  const wasm = fs.readFileSync('contract.wasm');
+  const wasm = fs.readFileSync("contract.wasm");
   console.log('Uploading contract');
   const uploadReceipt = await client.upload(wasm, {})
     .catch((err) => { throw new Error(`Could not upload contract: ${err}`); });
@@ -54,13 +54,40 @@ const main = async () => {
   // Get the code ID from the receipt
   const { codeId } = uploadReceipt;
 
-  // Create an instance of the Counter contract, providing a starting count
-  const initMsg = { count: 0 };
-  const contract = await client.instantiate(codeId, initMsg, `My Counter${Math.ceil(Math.random() * 10000)}`)
-    .catch((err) => { throw new Error(`Could not instantiate contract: ${err}`); });
-  console.log('contract: ', contract);
-};
+  // Contract hash, useful for contract composition
+  const contractCodeHash = await client.restClient.getCodeHashByCodeId(codeId);
+  console.log(`Contract hash: ${contractCodeHash}`);
 
-main().catch((err) => {
+  const initMsg = {
+    name: "Secret Funder NFT",
+    symbol: "SFNFT",
+    admin: accAddress,
+    entropy: Buffer.from("Hello World").toString('base64'),
+    config: {
+        public_token_supply: false,
+        public_owner: true,
+        enable_sealed_metadata: true,
+        unwrapped_metadata_is_private: true,
+        minter_may_update_metadata: true,
+        owner_may_update_metadata: true,
+        enable_burn: true,
+    }
+  }
+  const contract = await client.instantiate(
+    codeId, initMsg, "Secret Funder" + Math.ceil(Math.random() * 10000000)
+  );
+  console.log('contract: ', contract);
+
+  const contractAddress = contract.contractAddress;
+  let response;
+
+  // Query the current contract
+  console.log('Querying contract info');
+  response = await client.queryContractSmart(contractAddress, { "contract_info": {}});
+
+  console.log(response);
+}
+
+deploy().catch((err) => {
   console.error(err);
 });
