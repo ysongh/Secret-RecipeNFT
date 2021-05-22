@@ -1,67 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const {
-  EnigmaUtils, Secp256k1Pen, SigningCosmWasmClient, pubkeyToAddress, encodeSecp256k1Pubkey,
-} = require('secretjs');
 
+const helper = require('../helper');
 require('dotenv').config();
 
-const customFees = {
-  upload: {
-    amount: [{ amount: "2000000", denom: "uscrt" }],
-    gas: "2000000",
-  },
-  init: {
-    amount: [{ amount: "500000", denom: "uscrt" }],
-    gas: "500000",
-  },
-  exec: {
-    amount: [{ amount: "500000", denom: "uscrt" }],
-    gas: "500000",
-  },
-  send: {
-    amount: [{ amount: "80000", denom: "uscrt" }],
-    gas: "80000",
-  },
-};
-
-const httpUrl = process.env.SECRET_REST_URL;
-
 router.post('/createnft', async (req, res, next) => {
-  const mnemonic = process.env.MNEMONIC;
-
-  const signingPen = await Secp256k1Pen.fromMnemonic(mnemonic)
-    .catch((err) => { throw new Error(`Could not get signing pen: ${err}`); });
-
-  // Get the public key
-  const pubkey = encodeSecp256k1Pubkey(signingPen.pubkey);
-
-  // Get the wallet address
-  const accAddress = pubkeyToAddress(pubkey, 'secret');
-
-  // Initialize client
-  const txEncryptionSeed = EnigmaUtils.GenerateNewSeed();
-  const client = new SigningCosmWasmClient(
-    httpUrl,
-    accAddress,
-    (signBytes) => signingPen.sign(signBytes),
-    txEncryptionSeed, customFees,
-  );
-  console.log(`Wallet address=${accAddress}`);
-  
-  // Define your metadata
-  const publicMetadata = "<public metadata>";
-  const privateMetadata = "<private metadata>";
+  const {client, accAddress} = await helper.getClient();
 
   // Mint a new token
   const handleMsg = {
     mint_nft: {
       owner: accAddress,
       public_metadata: {
-        name: publicMetadata,
+        name: req.body.name,
+        description: req.body.description,
+        image: req.body.image,
       },
       private_metadata: {
-        name: privateMetadata,
+        name: "None",
       },
     },
   };
@@ -80,31 +36,7 @@ router.post('/createnft', async (req, res, next) => {
 });
 
 router.get('/nfts', async (req, res, next) => {
-  const mnemonic = process.env.MNEMONIC;
-
-  // A pen is the most basic tool you can think of for signing.
-  // This wraps a single keypair and allows for signing.
-  const signingPen = await Secp256k1Pen.fromMnemonic(mnemonic).catch((err) => {
-    throw new Error(`Could not get signing pen: ${err}`);
-  });
-
-  // Get the public key
-  const pubkey = encodeSecp256k1Pubkey(signingPen.pubkey);
-
-  // get the wallet address
-  const accAddress = pubkeyToAddress(pubkey, 'secret');
-
-  // initialize client
-  const txEncryptionSeed = EnigmaUtils.GenerateNewSeed();
-
-  const client = new SigningCosmWasmClient(
-    httpUrl,
-    accAddress,
-    (signBytes) => signingPen.sign(signBytes),
-    txEncryptionSeed,
-    customFees
-  );
-  console.log(`Wallet address=${accAddress}`);
+  const {client, accAddress} = await helper.getClient();
 
   // 1. Get a list of all tokens
   let queryMsg = {

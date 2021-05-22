@@ -5,25 +5,6 @@ const {
 const fs = require('fs');
 require('dotenv').config();
 
-const customFees = {
-  upload: {
-    amount: [{ amount: "3000000", denom: "uscrt" }],
-    gas: "3000000",
-},
-init: {
-    amount: [{ amount: "500000", denom: "uscrt" }],
-    gas: "500000",
-},
-exec: {
-    amount: [{ amount: "500000", denom: "uscrt" }],
-    gas: "500000",
-},
-send: {
-    amount: [{ amount: "80000", denom: "uscrt" }],
-    gas: "80000",
-},
-};
-
 const deploy = async () => {
   const httpUrl = process.env.SECRET_REST_URL;
   const mnemonic = process.env.MNEMONIC;
