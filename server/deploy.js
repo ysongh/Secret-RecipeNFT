@@ -3,27 +3,30 @@ const {
 } = require("secretjs");
   
 const fs = require('fs');
+const helper = require('./helper');
 require('dotenv').config();
 
+const customFees = {
+  upload: {
+    amount: [{ amount: "3000000", denom: "uscrt" }],
+    gas: "3000000",
+},
+  init: {
+      amount: [{ amount: "500000", denom: "uscrt" }],
+      gas: "500000",
+  },
+  exec: {
+      amount: [{ amount: "500000", denom: "uscrt" }],
+      gas: "500000",
+  },
+  send: {
+      amount: [{ amount: "80000", denom: "uscrt" }],
+      gas: "80000",
+  },
+};
+
 const deploy = async () => {
-  const httpUrl = process.env.SECRET_REST_URL;
-  const mnemonic = process.env.MNEMONIC;
-
-  const signingPen = await Secp256k1Pen.fromMnemonic(mnemonic)
-    .catch((err) => { throw new Error(`Could not get signing pen: ${err}`); });
-
-  const pubkey = encodeSecp256k1Pubkey(signingPen.pubkey);
-  const accAddress = pubkeyToAddress(pubkey, 'secret');
-
-  // Initialize client
-  const txEncryptionSeed = EnigmaUtils.GenerateNewSeed();
-  const client = new SigningCosmWasmClient(
-    httpUrl,
-    accAddress,
-    (signBytes) => signingPen.sign(signBytes),
-    txEncryptionSeed, customFees,
-  );
-  console.log(`Wallet address=${accAddress}`);
+  const {client, accAddress} = await helper.getClient();
 
   // Upload the contract wasm
   const wasm = fs.readFileSync("contract.wasm");
@@ -45,7 +48,7 @@ const deploy = async () => {
     admin: accAddress,
     entropy: Buffer.from("Hello World").toString('base64'),
     config: {
-        public_token_supply: false,
+        public_token_supply: true,
         public_owner: true,
         enable_sealed_metadata: true,
         unwrapped_metadata_is_private: true,

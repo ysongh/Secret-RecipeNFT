@@ -89,4 +89,28 @@ router.get('/nfts', async (req, res, next) => {
   });
 });
 
+router.get('/nfts/:id', async (req, res, next) => {
+  const {client, accAddress} = await helper.getClient();
+
+  const token_id = req.params.id;
+
+  queryMsg = {
+    nft_dossier: {
+      token_id: token_id,
+    },
+  };
+
+  console.log(`Query public data of token #${token_id}`);
+  const response = await client
+    .queryContractSmart(process.env.SECRET_NFT_CONTRACT, queryMsg)
+    .catch((err) => {
+      throw new Error(`Could not execute contract: ${err}`);
+    });
+  console.log("response: ", response);
+
+  return res.status(200).json({
+    'data': response
+  });
+});
+
 module.exports = router;
