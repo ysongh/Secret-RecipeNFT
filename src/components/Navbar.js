@@ -5,7 +5,9 @@ import {
 import { Menu, Button } from 'semantic-ui-react';
 import { Bip39, Random } from "@iov/crypto";
 
-function Navbar({ walletAddress, setWalletAddress }) {
+import axios from '../axios';
+
+function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance }) {
   const [loggedIn, setLoggedIn] = useState(null);
 
   useEffect(() => {
@@ -18,17 +20,27 @@ function Navbar({ walletAddress, setWalletAddress }) {
       setWalletAddress(address);
     }
 
+    async function getBalance(mnemonic){
+      if(mnemonic){
+        const { data } = await axios.put('/network/balance', {mnemonic});
+        console.log(data);
+        setSBalance(data.data.balance[0].amount);
+      }
+    }
+
     const key = "burner-wallet";
     const loaded = localStorage.getItem(key);
     if (loaded) {
       console.log(loaded);
       burnerWallet(loaded);
+      getBalance(loaded);
     }
     else {
       const generated = Bip39.encode(Random.getBytes(16)).toString();
       localStorage.setItem(key, generated);
       console.log(generated);
       burnerWallet(generated);
+      getBalance(generated);
     }
   }, [])
 
@@ -40,6 +52,9 @@ function Navbar({ walletAddress, setWalletAddress }) {
       />
       {walletAddress ? (
         <Menu.Menu position='right'>
+          <Menu.Item>
+            <p>{sBalance} SCRT</p>
+          </Menu.Item>
           <Menu.Item>
             <Button secondary>Disconnect</Button>
           </Menu.Item>

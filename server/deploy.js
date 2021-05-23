@@ -6,25 +6,6 @@ const fs = require('fs');
 const helper = require('./helper');
 require('dotenv').config();
 
-const customFees = {
-  upload: {
-    amount: [{ amount: "3000000", denom: "uscrt" }],
-    gas: "3000000",
-},
-  init: {
-      amount: [{ amount: "500000", denom: "uscrt" }],
-      gas: "500000",
-  },
-  exec: {
-      amount: [{ amount: "500000", denom: "uscrt" }],
-      gas: "500000",
-  },
-  send: {
-      amount: [{ amount: "80000", denom: "uscrt" }],
-      gas: "80000",
-  },
-};
-
 const deploy = async () => {
   const {client, accAddress} = await helper.getClient();
 

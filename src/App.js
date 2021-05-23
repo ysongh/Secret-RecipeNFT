@@ -6,10 +6,15 @@ import Navbar from './components/Navbar';
 
 function App() {
   const [walletAddress, setWalletAddress] = useState('');
+  const [sBalance, setSBalance] = useState('');
 
   return (
     <div className="App">
-      <Navbar walletAddress={walletAddress} setWalletAddress={setWalletAddress} />
+      <Navbar
+        walletAddress={walletAddress}
+        setWalletAddress={setWalletAddress}
+        sBalance={sBalance} 
+        setSBalance={setSBalance} />
       <Container>
         <p>{walletAddress}</p>
       </Container>

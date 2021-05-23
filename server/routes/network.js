@@ -4,13 +4,13 @@ const router = express.Router();
 const helper = require('../helper');
 require('dotenv').config();
 
-router.get('/balance', async (req, res, next) => {
-  const {client, accAddress} = await helper.getClient();
+router.put('/balance', async (req, res, next) => {
+  const {client, accAddress} = await helper.getClient(req.body.mnemonic);
 
   const acct = await client.getAccount();
 
   return res.status(200).json({
-    'data': acct.balance
+    'data': acct
   });
 });
 

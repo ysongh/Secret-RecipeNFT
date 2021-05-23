@@ -23,9 +23,8 @@ const customFees = {
   },
 };
 
-exports.getClient = async function() {
+exports.getClient = async function(mnemonic = process.env.MNEMONIC) {
   const httpUrl = process.env.SECRET_REST_URL;
-  const mnemonic = process.env.MNEMONIC;
 
   // A pen is the most basic tool you can think of for signing.
   // This wraps a single keypair and allows for signing.
