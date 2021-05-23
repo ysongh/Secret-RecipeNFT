@@ -4,6 +4,16 @@ const router = express.Router();
 const helper = require('../helper');
 require('dotenv').config();
 
+router.get('/balance', async (req, res, next) => {
+  const {client, accAddress} = await helper.getClient();
+
+  const acct = await client.getAccount();
+
+  return res.status(200).json({
+    'data': acct.balance
+  });
+});
+
 router.post('/createnft', async (req, res, next) => {
   const {client, accAddress} = await helper.getClient();
 
