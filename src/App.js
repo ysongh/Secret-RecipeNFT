@@ -3,6 +3,7 @@ import { Container } from 'semantic-ui-react';
 
 import './App.css';
 import Navbar from './components/Navbar';
+import AddForm from './pages/AddForm';
 
 function App() {
   const [walletAddress, setWalletAddress] = useState('');
@@ -17,6 +18,7 @@ function App() {
         setSBalance={setSBalance} />
       <Container>
         <p>{walletAddress}</p>
+        <AddForm />
       </Container>
     </div>
   );
