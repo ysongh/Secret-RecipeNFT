@@ -8,6 +8,7 @@ function AddForm() {
   const [title, setTitle] = useState('');
   const [image, setImageURL] = useState('');
   const [body, setBody] = useState('');
+  const [transaction, setTransaction] = useState('');
 
   const getFileAndUploadONPinata = async event => {
     try{
@@ -31,9 +32,24 @@ function AddForm() {
     }
   }
 
+  const createRecipeNFT = async () => {
+    try{
+      const recipeData = {
+        name: title,
+        image,
+        description: body
+      }
+  
+      const {data} = await axios.post("/network/createnft", recipeData)
+      setTransaction(data.data.transactionHash);
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
   return (
     <Container>
-      <Card centered style={{ width: '100%'}}>
+      <Card centered style={{ width: '600px'}}>
         <Card.Content>
           <Form>
             <Form.Field>
@@ -45,9 +61,16 @@ function AddForm() {
               <input type="file" onChange={getFileAndUploadONPinata} />
             </Form.Field>
             <Form.TextArea label='Detail' value={body} onChange={(e) => setBody(e.target.value)} />
+            {transaction && <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={"https://explorer.secrettestnet.io/transactions/" + transaction}>Success, See transaction</a>}
+            <br />
+            <br />
             <Button
               type='submit'
               color="black"
+              onClick={createRecipeNFT}
             >Submit</Button>
           </Form>
         </Card.Content>

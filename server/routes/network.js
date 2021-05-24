@@ -123,4 +123,25 @@ router.get('/nfts/:id', async (req, res, next) => {
   });
 });
 
+router.put('/addminters', async (req, res, next) => {
+  const {client, accAddress} = await helper.getClient();
+
+  handleMsg = {
+    add_minters: {
+      minters: [req.body.walletAddress],
+    },
+  };
+
+  const response = await client
+    .execute(process.env.SECRET_NFT_CONTRACT, handleMsg)
+    .catch((err) => {
+      throw new Error(`Could not execute contract: ${err}`);
+    });
+  console.log("response: ", response);
+
+  return res.status(200).json({
+    'data': response
+  });
+});
+
 module.exports = router;
