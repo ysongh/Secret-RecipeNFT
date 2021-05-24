@@ -5,6 +5,7 @@ import { Container } from 'semantic-ui-react';
 import './App.css';
 import Navbar from './components/Navbar';
 import Recipes from './pages/Recipes';
+import RecipeDetail from './pages/RecipeDetail';
 import AddForm from './pages/AddForm';
 
 function App() {
@@ -21,6 +22,9 @@ function App() {
       <Switch>
         <Route path="/addform">
           <AddForm />
+        </Route>
+        <Route path="/recipe/:id">
+          <RecipeDetail />
         </Route>
         <Route path="/">
           <Recipes />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Container, Card, Grid, Image, Button } from 'semantic-ui-react';
 
 import axios from '../axios';
@@ -18,7 +19,7 @@ function Recipes() {
 
   return (
     <Container>
-      <h1>List of Recipes</h1>
+      <h1>List of Recipe NFTs</h1>
       <Grid columns={3}>
         <Grid.Row>
           {recipes.map((recipe, index) => (
@@ -28,7 +29,7 @@ function Recipes() {
                 <Card.Content>
                   <Card.Header>{recipe.name}</Card.Header>
                   <div style={{marginTop: '.7rem'}}>
-                    <Button basic color='green'>
+                    <Button basic color='green' as={Link} to={`/recipe/${index}`}>
                       View
                     </Button>
                   </div>
