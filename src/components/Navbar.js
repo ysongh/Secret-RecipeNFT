@@ -25,7 +25,7 @@ function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance }) {
       if(mnemonic){
         const { data } = await axios.put('/network/balance', {mnemonic});
         console.log(data);
-        setSBalance(data.data.balance[0].amount);
+        setSBalance(+data.data.balance[0].amount / 10000000);
       }
     }
 

@@ -61,6 +61,7 @@ function AddForm() {
               <input type="file" onChange={getFileAndUploadONPinata} />
             </Form.Field>
             <Form.TextArea label='Detail' value={body} onChange={(e) => setBody(e.target.value)} />
+            <Form.TextArea label='Secret Recipe' />
             {transaction && <a
               target="_blank"
               rel="noopener noreferrer"

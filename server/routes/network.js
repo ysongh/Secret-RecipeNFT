@@ -144,4 +144,25 @@ router.put('/addminters', async (req, res, next) => {
   });
 });
 
+router.put('/pay', async (req, res, next) => {
+  const {client, accAddress} = await helper.getClient(req.body.mnemonic);
+
+  const rcpt = process.env.ADDRESS;
+  const memo = 'Pay for NFT Private Metadata';
+
+  const sent = await client.sendTokens(rcpt, [{ amount: '1000000', denom: 'uscrt' }], memo)
+    .catch((err) => { throw new Error(`Could not send tokens: ${err}`); });
+  console.log('sent', sent);
+
+  const query = { id: sent.transactionHash };
+  const tx = await client.searchTx(query)
+    .catch((err) => { throw new Error(`Could not execute the search: ${err}`); });
+  console.log('Transaction: ', tx);
+
+
+  return res.status(200).json({
+    'data': tx
+  });
+});
+
 module.exports = router;
