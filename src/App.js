@@ -4,6 +4,7 @@ import { Container } from 'semantic-ui-react';
 
 import './App.css';
 import Navbar from './components/Navbar';
+import Recipes from './pages/Recipes';
 import AddForm from './pages/AddForm';
 
 function App() {
@@ -22,9 +23,7 @@ function App() {
           <AddForm />
         </Route>
         <Route path="/">
-          <Container>
-            <p>{walletAddress}</p>
-          </Container>
+          <Recipes />
         </Route>
       </Switch>
     </Router>
