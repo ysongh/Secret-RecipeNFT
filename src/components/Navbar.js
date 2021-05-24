@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Secp256k1Pen, pubkeyToAddress, encodeSecp256k1Pubkey
 } from "secretjs";
@@ -47,8 +48,14 @@ function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance }) {
   return (
     <Menu color="blue" inverted pointing>
       <Menu.Item
+        as={Link}
         to="/"
-        name='Secret Funder'
+        name='Secret Recipe NFT'
+      />
+      <Menu.Item
+        as={Link}
+        to="/addform"
+        name='Add Recipe'
       />
       {walletAddress ? (
         <Menu.Menu position='right'>

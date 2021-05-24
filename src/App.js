@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 
 import './App.css';
@@ -10,17 +11,23 @@ function App() {
   const [sBalance, setSBalance] = useState('');
 
   return (
-    <div className="App">
+    <Router className="App">
       <Navbar
         walletAddress={walletAddress}
         setWalletAddress={setWalletAddress}
         sBalance={sBalance} 
         setSBalance={setSBalance} />
-      <Container>
-        <p>{walletAddress}</p>
-        <AddForm />
-      </Container>
-    </div>
+      <Switch>
+        <Route path="/addform">
+          <AddForm />
+        </Route>
+        <Route path="/">
+          <Container>
+            <p>{walletAddress}</p>
+          </Container>
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
