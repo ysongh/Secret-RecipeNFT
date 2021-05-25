@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Secp256k1Pen, pubkeyToAddress, encodeSecp256k1Pubkey
@@ -9,26 +9,29 @@ import { Bip39, Random } from "@iov/crypto";
 import axios from '../axios';
 
 function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance }) {
-  const [loggedIn, setLoggedIn] = useState(null);
+  async function burnerWallet(mnemonic){
+    const pen = await Secp256k1Pen.fromMnemonic(mnemonic);
+    const pubkey = encodeSecp256k1Pubkey(pen.pubkey);
+    const address = pubkeyToAddress(pubkey, "secret");
+    const signer = (signBytes) => pen.sign(signBytes);
+    console.log({ address, signer });
+    setWalletAddress(address);
+  }
 
-  useEffect(() => {
-    async function burnerWallet(mnemonic){
-      const pen = await Secp256k1Pen.fromMnemonic(mnemonic);
-      const pubkey = encodeSecp256k1Pubkey(pen.pubkey);
-      const address = pubkeyToAddress(pubkey, "secret");
-      const signer = (signBytes) => pen.sign(signBytes);
-      console.log({ address, signer });
-      setWalletAddress(address);
-    }
-
-    async function getBalance(mnemonic){
-      if(mnemonic){
-        const { data } = await axios.put('/network/balance', {mnemonic});
-        console.log(data);
-        setSBalance(+data.data.balance[0].amount / 10000000);
+  async function getBalance(mnemonic){
+    if(mnemonic){
+      const { data } = await axios.put('/network/balance', {mnemonic});
+      console.log(data);
+      if(+data.data?.balance[0].amount){
+        setSBalance(+data.data?.balance[0].amount / 10000000);
+      }
+      else{
+        setSBalance(0);
       }
     }
+  }
 
+  const openWallet = () => {
     const key = "burner-wallet";
     const loaded = localStorage.getItem(key);
     if (loaded) {
@@ -43,7 +46,7 @@ function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance }) {
       burnerWallet(generated);
       getBalance(generated);
     }
-  }, [])
+  }
 
   return (
     <Menu color="blue" inverted pointing>
@@ -69,7 +72,7 @@ function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance }) {
       ) : (
         <Menu.Menu position='right'>
           <Menu.Item>
-            <Button color='green'>Open Wallet</Button>
+            <Button color='green' onClick={openWallet}>Open Wallet</Button>
           </Menu.Item>
         </Menu.Menu>
       )}
