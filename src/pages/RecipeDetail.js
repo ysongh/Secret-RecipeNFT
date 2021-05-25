@@ -3,11 +3,13 @@ import { useParams } from 'react-router-dom';
 import { Container, Card, Grid, Image, Button } from 'semantic-ui-react';
 
 import axios from '../axios';
+import Spinner from '../components/Spinner';
 
 function Recipes() {
   const { id } = useParams();
   const [recipe, setRecipe] = useState({});
   const [showRecipe, setShowRecipe] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getRecipes = async () => {
@@ -20,11 +22,19 @@ function Recipes() {
   }, [id])
 
   const payToView = async () => {
-    const key = "burner-wallet";
-    const loaded = localStorage.getItem(key);
-    const { data } = await axios.put('/network/pay', loaded);
-    console.log(data)
-    setShowRecipe(true);
+    try{
+      setLoading(true);
+      const key = "burner-wallet";
+      const loaded = localStorage.getItem(key);
+      const { data } = await axios.put('/network/pay', loaded);
+      console.log(data)
+      setShowRecipe(true);
+      setLoading(false);
+    } catch(err){
+      console.error(err);
+      setLoading(false);
+    }
+   
   }
 
   return (
@@ -43,6 +53,7 @@ function Recipes() {
                 Pay 1 SCRT to View Secret Recipe
               </Button>
             </div>
+            {loading && <Spinner text="Paying..." />}
           </Card.Content>
         </Card>
         {showRecipe && <Card color='orange'>

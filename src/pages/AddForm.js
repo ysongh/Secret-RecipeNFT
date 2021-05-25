@@ -3,12 +3,14 @@ import { Container, Card, Form, Button } from 'semantic-ui-react';
 
 import { pinataApiKey, pinataSecretApiKey } from '../config';
 import axios from '../axios';
+import Spinner from '../components/Spinner';
 
 function AddForm() {
   const [title, setTitle] = useState('');
   const [image, setImageURL] = useState('');
   const [body, setBody] = useState('');
   const [transaction, setTransaction] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const getFileAndUploadONPinata = async event => {
     try{
@@ -34,6 +36,7 @@ function AddForm() {
 
   const createRecipeNFT = async () => {
     try{
+      setLoading(true);
       const recipeData = {
         name: title,
         image,
@@ -42,8 +45,13 @@ function AddForm() {
   
       const {data} = await axios.post("/network/createnft", recipeData)
       setTransaction(data.data.transactionHash);
+      setTitle('');
+      setImageURL('');
+      setBody('');
+      setLoading(false);
     } catch(err) {
       console.error(err);
+      setLoading(false);
     }
   }
 
@@ -73,6 +81,7 @@ function AddForm() {
               color="black"
               onClick={createRecipeNFT}
             >Submit</Button>
+            {loading && <Spinner text="Creating NFT..." />}
           </Form>
         </Card.Content>
       </Card>
