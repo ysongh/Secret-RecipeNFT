@@ -4,11 +4,10 @@ import {
   Secp256k1Pen, pubkeyToAddress, encodeSecp256k1Pubkey
 } from "secretjs";
 import { Menu, Button } from 'semantic-ui-react';
-import { Bip39, Random } from "@iov/crypto";
 
 import axios from '../axios';
 
-function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance }) {
+function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance, setOpenWallet }) {
   async function burnerWallet(mnemonic){
     const pen = await Secp256k1Pen.fromMnemonic(mnemonic);
     const pubkey = encodeSecp256k1Pubkey(pen.pubkey);
@@ -40,11 +39,7 @@ function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance }) {
       getBalance(loaded);
     }
     else {
-      const generated = Bip39.encode(Random.getBytes(16)).toString();
-      localStorage.setItem(key, generated);
-      console.log(generated);
-      burnerWallet(generated);
-      getBalance(generated);
+      setOpenWallet(true);
     }
   }
 

@@ -1,0 +1,19 @@
+.modal-body {
+    display: flex !important;
+    justify-content: space-around;
+}
+
+.modal-icon {
+    cursor: pointer;
+    transition: all .3s;
+}
+
+.modal-icon:hover {
+    opacity: .7;
+}
+
+.modal-icon p{
+    font-size: 2rem;
+    margin-top: 1rem;
+    font-weight: bold;
+}

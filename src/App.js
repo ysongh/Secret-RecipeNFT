@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Container } from 'semantic-ui-react';
 
 import './App.css';
 import Navbar from './components/Navbar';
 import Recipes from './pages/Recipes';
 import RecipeDetail from './pages/RecipeDetail';
 import AddForm from './pages/AddForm';
+import WalletModal from './components/WalletModal';
 
 function App() {
   const [walletAddress, setWalletAddress] = useState('');
   const [sBalance, setSBalance] = useState('');
+  const [openWallet, setOpenWallet] = useState(false);
 
   return (
     <Router className="App">
@@ -18,7 +19,8 @@ function App() {
         walletAddress={walletAddress}
         setWalletAddress={setWalletAddress}
         sBalance={sBalance} 
-        setSBalance={setSBalance} />
+        setSBalance={setSBalance}
+        setOpenWallet={setOpenWallet} />
       <Switch>
         <Route path="/addform">
           <AddForm />
@@ -30,6 +32,11 @@ function App() {
           <Recipes />
         </Route>
       </Switch>
+      <WalletModal
+        openWallet={openWallet}
+        setOpenWallet={setOpenWallet}
+        setWalletAddress={setWalletAddress}
+        setSBalance={setSBalance} />
     </Router>
   );
 }
