@@ -5,13 +5,21 @@ const helper = require('../helper');
 require('dotenv').config();
 
 router.put('/balance', async (req, res, next) => {
-  const {client, accAddress} = await helper.getClient(req.body.mnemonic);
+  try{
+    const {client, accAddress} = await helper.getClient(req.body.mnemonic);
 
-  const acct = await client.getAccount();
+    const acct = await client.getAccount();
 
-  return res.status(200).json({
-    'data': acct
-  });
+    return res.status(200).json({
+      'data': acct
+    });
+  } catch(err){
+    console.log(err);
+    return res.status(500).json({
+      'err': err
+    });
+  }
+  
 });
 
 router.post('/createnft', async (req, res, next) => {

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Button, Icon, Modal, Form, TextArea } from 'semantic-ui-react';
 import {
   Secp256k1Pen, pubkeyToAddress, encodeSecp256k1Pubkey
 } from "secretjs";
@@ -12,6 +12,8 @@ const key = "burner-wallet";
 function WalletModal({ setOpenWallet, openWallet, setWalletAddress, setSBalance }) {
   const [mode, setMode] = useState("start");
   const [words, setWords] = useState("");
+  const [body, setBody] = useState('');
+  const [error, setError] = useState('');
 
   async function burnerWallet(mnemonic){
     const pen = await Secp256k1Pen.fromMnemonic(mnemonic);
@@ -45,6 +47,26 @@ function WalletModal({ setOpenWallet, openWallet, setWalletAddress, setSBalance 
     setWords(generated);
   }
 
+  const importWallet = async () => {
+    try{
+      const { data } = await axios.put('/network/balance', {mnemonic: body});
+      console.log(data);
+
+      if(+data.data?.balance[0].amount){
+        setSBalance(+data.data?.balance[0].amount / 10000000);
+      }
+      else{
+        setSBalance(0);
+      }
+      localStorage.setItem(key, body);
+      burnerWallet(body);
+      setOpenWallet(false);
+    } catch(err) {
+      console.error(err);
+      setError("Invalid seed phase");
+    }
+  }
+
   return (
     <Modal
       onClose={() => setOpenWallet(false)}
@@ -62,7 +84,7 @@ function WalletModal({ setOpenWallet, openWallet, setWalletAddress, setSBalance 
               <p>Create Wallet</p>
             </center>
             <center className="modal-icon">
-              <Icon name='key' size='massive' />
+              <Icon name='key' size='massive' onClick={() => setMode("import")} />
               <p>Import Wallet</p>
             </center>
           </Modal.Description>
@@ -73,12 +95,31 @@ function WalletModal({ setOpenWallet, openWallet, setWalletAddress, setSBalance 
             <p>{words}</p>
           </Modal.Description>
         )}
-       
+       {mode === "import" && (
+          <Modal.Description>
+            <h4>Enter your seed phase</h4>
+            <Form>
+              <TextArea
+                placeholder='Seed Phase...'
+                value={body}
+                onChange={(e) => setBody(e.target.value)} />
+            </Form>
+            <p style={{ color: 'red', marginTop: '.5rem' }}>{error}</p>
+          </Modal.Description>
+        )}
       </Modal.Content>
       <Modal.Actions>
-        <Button color='black' onClick={() => setOpenWallet(false)}>
+        <Button onClick={() => {
+          setOpenWallet(false);
+          setMode("start");
+        }}>
           Close
         </Button>
+        {mode === "import" && (
+          <Button color='black' onClick={importWallet}>
+            Import
+          </Button>
+        )}
       </Modal.Actions>
     </Modal>
   )
