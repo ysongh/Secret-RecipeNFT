@@ -5,7 +5,7 @@ import { Container, Card, Grid, Image, Button } from 'semantic-ui-react';
 import axios from '../axios';
 import Spinner from '../components/Spinner';
 
-function Recipes() {
+function RecipeDetail({ setSBalance }) {
   const { id } = useParams();
   const [recipe, setRecipe] = useState({});
   const [showRecipe, setShowRecipe] = useState(false);
@@ -26,8 +26,19 @@ function Recipes() {
       setLoading(true);
       const key = "burner-wallet";
       const loaded = localStorage.getItem(key);
-      const { data } = await axios.put('/network/pay', loaded);
-      console.log(data)
+      const { data } = await axios.put('/network/pay', {mnemonic: loaded});
+      console.log(data);
+
+      const res = await axios.put('/network/balance', {mnemonic: loaded});
+      console.log(res);
+
+      if(+res.data.data?.balance[0].amount){
+        setSBalance(+res.data.data?.balance[0].amount / 10000000);
+      }
+      else{
+        setSBalance(0);
+      }
+
       setShowRecipe(true);
       setLoading(false);
     } catch(err){
@@ -66,4 +77,4 @@ function Recipes() {
   );
 }
 
-export default Recipes;
+export default RecipeDetail;
