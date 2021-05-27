@@ -33,7 +33,7 @@ function RecipeDetail({ setSBalance }) {
       console.log(res);
 
       if(+res.data.data?.balance[0].amount){
-        setSBalance(+res.data.data?.balance[0].amount / 10000000);
+        setSBalance(+res.data.data?.balance[0].amount / 1000000);
       }
       else{
         setSBalance(0);
