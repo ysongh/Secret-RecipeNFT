@@ -8,7 +8,7 @@ import Spinner from '../components/Spinner';
 function RecipeDetail({ walletAddress, setSBalance }) {
   const { id } = useParams();
   const [recipe, setRecipe] = useState({});
-  const [showRecipe, setShowRecipe] = useState(false);
+  const [showRecipe, setShowRecipe] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ function RecipeDetail({ walletAddress, setSBalance }) {
       setRecipe(data.data.nft_dossier.public_metadata);
 
       if(data.data.nft_dossier.private_metadata){
-        setShowRecipe(true);
+        setShowRecipe(data.data.nft_dossier.private_metadata.description);
       }
     }
 
@@ -41,6 +41,13 @@ function RecipeDetail({ walletAddress, setSBalance }) {
       }
       else{
         setSBalance(0);
+      }
+
+      const privateData = await axios.get(`/network/nfts/${id}`);
+      console.log(privateData.data.data.nft_dossier.private_metadata);
+
+      if(privateData.data.data.nft_dossier.private_metadata){
+        setShowRecipe(privateData.data.data.nft_dossier.private_metadata.description);
       }
 
       setShowRecipe(true);
@@ -73,7 +80,7 @@ function RecipeDetail({ walletAddress, setSBalance }) {
         </Card>
         {showRecipe && <Card color='orange'>
           <Card.Content>
-            <Card.Header>Just add water</Card.Header>
+            <Card.Header>{showRecipe}</Card.Header>
           </Card.Content>
         </Card>}
       </div>

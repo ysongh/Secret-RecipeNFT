@@ -39,7 +39,7 @@ router.post('/createnft', async (req, res, next) => {
           image: req.body.image,
         },
         private_metadata: {
-          name: "None",
+          description: req.body.secretDescription,
         },
       },
     };

@@ -9,6 +9,7 @@ function AddForm() {
   const [title, setTitle] = useState('');
   const [image, setImageURL] = useState('');
   const [body, setBody] = useState('');
+  const [secretDescription, setSecretDescription] = useState('');
   const [transaction, setTransaction] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +41,8 @@ function AddForm() {
       const recipeData = {
         name: title,
         image,
-        description: body
+        description: body,
+        secretDescription: secretDescription
       }
   
       const {data} = await axios.post("/network/createnft", recipeData)
@@ -48,6 +50,7 @@ function AddForm() {
       setTitle('');
       setImageURL('');
       setBody('');
+      setSecretDescription('');
       setLoading(false);
     } catch(err) {
       console.error(err);
@@ -69,7 +72,7 @@ function AddForm() {
               <input type="file" onChange={getFileAndUploadONPinata} />
             </Form.Field>
             <Form.TextArea label='Detail' value={body} onChange={(e) => setBody(e.target.value)} />
-            <Form.TextArea label='Secret Recipe' />
+            <Form.TextArea label='Secret Recipe' value={secretDescription} onChange={(e) => setSecretDescription(e.target.value)} />
             {transaction && <a
               target="_blank"
               rel="noopener noreferrer"
