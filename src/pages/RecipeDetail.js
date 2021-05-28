@@ -16,6 +16,10 @@ function RecipeDetail({ walletAddress, setSBalance }) {
       const { data } = await axios.get(`/network/nfts/${id}`);
       console.log(data);
       setRecipe(data.data.nft_dossier.public_metadata);
+
+      if(data.data.nft_dossier.private_metadata){
+        setShowRecipe(true);
+      }
     }
 
     if(id) getRecipes();
@@ -26,7 +30,7 @@ function RecipeDetail({ walletAddress, setSBalance }) {
       setLoading(true);
       const key = "burner-wallet";
       const loaded = localStorage.getItem(key);
-      const { data } = await axios.put('/network/pay', {mnemonic: loaded});
+      const { data } = await axios.put(`/network/pay/${id}`, {mnemonic: loaded});
       console.log(data);
 
       const res = await axios.put('/network/balance', {mnemonic: loaded});

@@ -190,10 +190,10 @@ router.put('/addminters', async (req, res, next) => {
 });
 
 // PUT /api/network/pay
-// User pay 1 SCRT
-router.put('/pay', async (req, res, next) => {
+// User pay 1 SCRT to see NFT's private metadata
+router.put('/pay/:id', async (req, res, next) => {
   try {
-    const {client, accAddress} = await helper.getClient(req.body.mnemonic);
+    let {client, accAddress} = await helper.getClient(req.body.mnemonic);
 
     const rcpt = process.env.ADDRESS;
     const memo = 'Pay for NFT Private Metadata';
@@ -208,6 +208,23 @@ router.put('/pay', async (req, res, next) => {
       .catch((err) => { throw new Error(`Could not execute the search: ${err}`); });
     console.log('Transaction: ', tx);
 
+    const newClient = await helper.getClient();
+    client = newClient.client;
+    const token_id = req.params.id;
+
+    handleMsg = {
+      reveal: {
+        token_id: token_id,
+      },
+    };
+
+    // Unwraps the sealed private metadata
+    const response = await client
+      .execute(process.env.SECRET_NFT_CONTRACT, handleMsg)
+      .catch((err) => {
+        throw new Error(`Could not execute contract: ${err}`);
+      });
+    console.log("response: ", response);
 
     return res.status(200).json({
       'data': tx
