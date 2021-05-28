@@ -26,7 +26,9 @@ function App() {
           <AddForm />
         </Route>
         <Route path="/recipe/:id">
-          <RecipeDetail setSBalance={setSBalance}/>
+          <RecipeDetail
+            walletAddress={walletAddress}
+            setSBalance={setSBalance}/>
         </Route>
         <Route path="/">
           <Recipes />

@@ -7,6 +7,8 @@ import { Menu, Button } from 'semantic-ui-react';
 
 import axios from '../axios';
 
+const key = "burner-wallet";
+
 function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance, setOpenWallet }) {
   async function burnerWallet(mnemonic){
     const pen = await Secp256k1Pen.fromMnemonic(mnemonic);
@@ -31,7 +33,6 @@ function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance, setOpe
   }
 
   const openWallet = () => {
-    const key = "burner-wallet";
     const loaded = localStorage.getItem(key);
     if (loaded) {
       console.log(loaded);
@@ -43,6 +44,12 @@ function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance, setOpe
     }
   }
 
+  const disconnectWallet = () => {
+    setSBalance('');
+    localStorage.clear();
+    setWalletAddress(null);
+  }
+
   return (
     <Menu color="blue" inverted pointing>
       <Menu.Item
@@ -50,18 +57,20 @@ function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance, setOpe
         to="/"
         name='Secret Recipe NFT'
       />
-      <Menu.Item
-        as={Link}
-        to="/addform"
-        name='Add Recipe'
-      />
+      {walletAddress && (
+        <Menu.Item
+          as={Link}
+          to="/addform"
+          name='Add Recipe'
+        />
+      )}
       {walletAddress ? (
         <Menu.Menu position='right'>
           <Menu.Item>
             <p>{sBalance} SCRT</p>
           </Menu.Item>
           <Menu.Item>
-            <Button secondary>Disconnect</Button>
+            <Button secondary onClick={disconnectWallet}>Disconnect</Button>
           </Menu.Item>
         </Menu.Menu>
       ) : (

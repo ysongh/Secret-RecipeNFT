@@ -5,7 +5,7 @@ import { Container, Card, Grid, Image, Button } from 'semantic-ui-react';
 import axios from '../axios';
 import Spinner from '../components/Spinner';
 
-function RecipeDetail({ setSBalance }) {
+function RecipeDetail({ walletAddress, setSBalance }) {
   const { id } = useParams();
   const [recipe, setRecipe] = useState({});
   const [showRecipe, setShowRecipe] = useState(false);
@@ -60,9 +60,9 @@ function RecipeDetail({ setSBalance }) {
               {recipe.description}
             </Card.Description>
             <div style={{marginTop: '.7rem'}}>
-              <Button basic color='green' onClick={payToView}>
+              {walletAddress && <Button basic color='green' onClick={payToView}>
                 Pay 1 SCRT to View Secret Recipe
-              </Button>
+              </Button>}
             </div>
             {loading && <Spinner text="Paying..." />}
           </Card.Content>
