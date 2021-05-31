@@ -69,6 +69,16 @@ function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance, setOpe
         {walletAddress ? (
           <Menu.Menu position='right'>
             <Menu.Item>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={"https://explorer.secrettestnet.io/account/" + walletAddress}
+              >
+                {walletAddress.substring(0,8)}...{walletAddress.substring(34,42)}
+              </a>
+              
+            </Menu.Item>
+            <Menu.Item>
               <p>{sBalance} SCRT</p>
             </Menu.Item>
             <Menu.Item>
