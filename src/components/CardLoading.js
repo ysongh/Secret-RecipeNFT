@@ -15,7 +15,7 @@ function CardLoading() {
                 <Placeholder.Line length='medium' />
               </Placeholder.Header>
             </Placeholder>
-            <Button style={{marginTop: '.9rem'}} disabled basic color='green'>
+            <Button style={{marginTop: '.9rem'}} disabled color='black'>
               View
             </Button>
           </Card.Content>

@@ -40,7 +40,7 @@ function Recipes() {
                     <Card.Content>
                       <Card.Header>{recipe.name}</Card.Header>
                       <div style={{marginTop: '.7rem'}}>
-                        <Button basic color='green' as={Link} to={`/recipe/${index}`}>
+                        <Button color='black' as={Link} to={`/recipe/${index}`}>
                           View
                         </Button>
                       </div>

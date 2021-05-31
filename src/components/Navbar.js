@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Secp256k1Pen, pubkeyToAddress, encodeSecp256k1Pubkey
 } from "secretjs";
-import { Menu, Button } from 'semantic-ui-react';
+import { Menu, Container, Button } from 'semantic-ui-react';
 
 import axios from '../axios';
 
@@ -51,35 +51,38 @@ function Navbar({ walletAddress, setWalletAddress, sBalance, setSBalance, setOpe
   }
 
   return (
-    <Menu color="blue" inverted pointing>
-      <Menu.Item
-        as={Link}
-        to="/"
-        name='Secret Recipe NFT'
-      />
-      {walletAddress && (
+    <Menu color="black" inverted pointing>
+      <Container>
         <Menu.Item
           as={Link}
-          to="/addform"
-          name='Add Recipe'
-        />
-      )}
-      {walletAddress ? (
-        <Menu.Menu position='right'>
-          <Menu.Item>
-            <p>{sBalance} SCRT</p>
-          </Menu.Item>
-          <Menu.Item>
-            <Button secondary onClick={disconnectWallet}>Disconnect</Button>
-          </Menu.Item>
-        </Menu.Menu>
-      ) : (
-        <Menu.Menu position='right'>
-          <Menu.Item>
-            <Button color='green' onClick={openWallet}>Open Wallet</Button>
-          </Menu.Item>
-        </Menu.Menu>
-      )}
+          to="/"
+        >
+          <img src='/logo.png' style={{ width: '9rem', marginLeft: '-5px'}} />
+        </Menu.Item>
+        {walletAddress && (
+          <Menu.Item
+            as={Link}
+            to="/addform"
+            name='Add Recipe'
+          />
+        )}
+        {walletAddress ? (
+          <Menu.Menu position='right'>
+            <Menu.Item>
+              <p>{sBalance} SCRT</p>
+            </Menu.Item>
+            <Menu.Item>
+              <Button color="red" onClick={disconnectWallet}>Disconnect</Button>
+            </Menu.Item>
+          </Menu.Menu>
+        ) : (
+          <Menu.Menu position='right'>
+            <Menu.Item>
+              <Button color='pink' onClick={openWallet}>Open Wallet</Button>
+            </Menu.Item>
+          </Menu.Menu>
+        )}
+      </Container>
     </Menu>
   );
 }
