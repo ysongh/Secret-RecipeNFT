@@ -60,8 +60,12 @@ function AddForm() {
 
   return (
     <Container>
-      <Card centered style={{ width: '600px'}}>
+      <Card centered className="form-card">
         <Card.Content>
+          <h1 style={{ fontSize: '1.8rem'}}>Want to share your food or drink recipe?</h1>
+          <p style={{ fontSize: '1rem', color: 'gray', marginBottom: '2rem' }}>
+            Fill the details below, viewers cannot see your Secret Recipe until they paid
+          </p>
           <Form>
             <Form.Field>
               <label>Title</label>
@@ -74,6 +78,7 @@ function AddForm() {
             <Form.TextArea label='Detail' value={body} onChange={(e) => setBody(e.target.value)} />
             <Form.TextArea label='Secret Recipe' value={secretDescription} onChange={(e) => setSecretDescription(e.target.value)} />
             {transaction && <a
+              style={{ fontSize: '1.6rem'}}
               target="_blank"
               rel="noopener noreferrer"
               href={"https://explorer.secrettestnet.io/transactions/" + transaction}>Success, See transaction</a>}
@@ -81,7 +86,8 @@ function AddForm() {
             <br />
             <Button
               type='submit'
-              color="black"
+              color="pink"
+              size='large'
               onClick={createRecipeNFT}
             >Submit</Button>
             {loading && <Spinner text="Creating NFT..." />}

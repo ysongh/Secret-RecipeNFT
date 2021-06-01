@@ -17,3 +17,14 @@
     margin-top: 1rem;
     font-weight: bold;
 }
+
+.form-card {
+    width: 100% !important;
+    max-width: 600px !important;
+    background-color: black !important;
+    color: white !important;
+}
+
+.form-card label {
+    color: white !important;
+}
