@@ -27,7 +27,7 @@ function Recipes() {
   }, [])
 
   return (
-    <Container>
+    <Container className="bodyHeight">
       <h1>List of Recipe NFTs</h1>
       {loading
         ? <CardLoading />

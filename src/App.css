@@ -1,3 +1,7 @@
+.bodyHeight{
+    min-height: 81vh;
+}
+
 .modal-body {
     display: flex !important;
     justify-content: space-around;

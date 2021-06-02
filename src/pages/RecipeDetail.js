@@ -60,7 +60,7 @@ function RecipeDetail({ walletAddress, setSBalance }) {
   }
 
   return (
-    <Container>
+    <Container className="bodyHeight">
       <h1>Recipe Detail</h1>
       <div style={{ display: 'flex', alignItems: 'start' }}>
         <Card color='orange'>

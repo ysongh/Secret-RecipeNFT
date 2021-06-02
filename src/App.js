@@ -7,6 +7,7 @@ import Recipes from './pages/Recipes';
 import RecipeDetail from './pages/RecipeDetail';
 import AddForm from './pages/AddForm';
 import WalletModal from './components/WalletModal';
+import Footer from './components/Footer';
 
 function App() {
   const [walletAddress, setWalletAddress] = useState('');
@@ -34,6 +35,7 @@ function App() {
           <Recipes />
         </Route>
       </Switch>
+      <Footer />
       <WalletModal
         openWallet={openWallet}
         setOpenWallet={setOpenWallet}

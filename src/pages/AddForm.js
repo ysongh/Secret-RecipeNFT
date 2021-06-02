@@ -59,7 +59,7 @@ function AddForm() {
   }
 
   return (
-    <Container>
+    <Container className="bodyHeight">
       <Card centered className="form-card">
         <Card.Content>
           <h1 style={{ fontSize: '1.8rem'}}>Want to share your food or drink recipe?</h1>
