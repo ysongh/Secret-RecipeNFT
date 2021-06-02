@@ -23,7 +23,7 @@ A dapp where user can create a NFT of recipe for food or drink. Recipe are hidde
 ## Running the dapp on local host
 - Clone or download this repository
 - Run `npm i` to install the dependencies
-- Run `npm run deployandcontact` to upload contract wasm and copy the contract address
+- Run `npm run deployandcontact` to deploy contract wasm and copy the contract address on the console when it is finsh deploying
 - Create a file called '.env' on the root folder and add the following code
 ```
 SECRET_REST_URL=https://secret-holodeck-2--lcd--full.datahub.figment.io/apikey/<your_apikey>

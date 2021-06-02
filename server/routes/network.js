@@ -159,6 +159,39 @@ router.get('/nfts/:id', async (req, res, next) => {
   }
 });
 
+// DELETE /api/network/nfts/:id
+// Burn a single NFT of recipe by Id
+router.delete('/nfts/:id', async (req, res, next) => {
+  try{
+    const {client} = await helper.getClient();
+
+    const token_id = req.params.id;
+
+    handleMsg = {
+      burn_nft: {
+        token_id: token_id,
+      },
+    };
+
+    console.log(`Removing token #${token_id}`);
+    const response = await client
+      .execute(process.env.SECRET_NFT_CONTRACT, handleMsg)
+      .catch((err) => {
+        throw new Error(`Could not execute contract: ${err}`);
+      });
+    console.log("response: ", response);
+
+    return res.status(200).json({
+      'data': response
+    });
+  } catch(err){
+    console.log(err);
+    return res.status(500).json({
+      'err': err
+    });
+  }
+});
+
 // PUT /api/network/addminters
 // Add a minter
 router.put('/addminters', async (req, res, next) => {
