@@ -161,6 +161,44 @@ router.get('/nfts/:id', async (req, res, next) => {
   }
 });
 
+// PUT /api/network/nfts/:id
+// Edit NFT's public metadata of recipe by Id
+router.put('/nfts/:id', async (req, res, next) => {
+  try{
+    const {client} = await helper.getClient();
+
+    const token_id = req.params.id;
+
+    handleMsg = {
+      set_public_metadata: {
+        token_id: token_id,
+        metadata: {
+          name: req.body.name,
+          description: req.body.description,
+          image: req.body.image,
+        },
+      },
+    };
+
+    console.log(`Editing token #${token_id}`);
+    const response = await client
+      .execute(process.env.SECRET_NFT_CONTRACT, handleMsg)
+      .catch((err) => {
+        throw new Error(`Could not execute contract: ${err}`);
+      });
+    console.log("response: ", response);
+
+    return res.status(200).json({
+      'data': response
+    });
+  } catch(err){
+    console.log(err);
+    return res.status(500).json({
+      'err': err
+    });
+  }
+});
+
 // DELETE /api/network/nfts/:id
 // Burn a single NFT of recipe by Id
 router.delete('/nfts/:id', async (req, res, next) => {
