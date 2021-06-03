@@ -33,14 +33,14 @@ function Recipes() {
         ? <CardLoading />
         : <Grid columns={3}>
             <Grid.Row>
-              {recipes.map((recipe, index) => (
-                <Grid.Column key={index} style={{marginBottom: '1rem'}}>
+              {recipes.map(recipe => (
+                <Grid.Column key={recipe.id} style={{marginBottom: '1rem'}}>
                   <Card color='orange'>
                     <Image src={'https://gateway.pinata.cloud/ipfs/' + recipe.image} wrapped />
                     <Card.Content>
                       <Card.Header>{recipe.name}</Card.Header>
                       <div style={{marginTop: '.7rem'}}>
-                        <Button color='black' as={Link} to={`/recipe/${index}`}>
+                        <Button color='black' as={Link} to={`/recipe/${recipe.id}`}>
                           View
                         </Button>
                       </div>

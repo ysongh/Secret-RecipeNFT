@@ -110,6 +110,8 @@ router.get('/nfts', async (req, res, next) => {
         .catch((err) => {
           throw new Error(`Could not execute contract: ${err}`);
         });
+      
+      response.nft_info.id = token_id;
       console.log("response: ", response);
 
       nftList.push(response.nft_info);

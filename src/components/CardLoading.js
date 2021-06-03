@@ -5,7 +5,7 @@ function CardLoading() {
   return (
     <Card.Group doubling itemsPerRow={3} stackable>
       {Array(6).fill(1).map((el, i) => (
-        <Card>
+        <Card key={i}>
           <Placeholder style={{height: '15rem'}}>
             <Placeholder.Image square/>
           </Placeholder>
