@@ -90,11 +90,10 @@ function AddForm() {
               size='large'
               onClick={createRecipeNFT}
             >Submit</Button>
-            {loading && <Spinner text="Creating NFT..." />}
           </Form>
         </Card.Content>
+        {loading && <Spinner text="Creating NFT..." />}
       </Card>
-      
     </Container>
   );
 }

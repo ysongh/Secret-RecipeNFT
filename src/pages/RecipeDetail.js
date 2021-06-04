@@ -44,13 +44,9 @@ function RecipeDetail({ walletAddress, setSBalance }) {
       }
 
       const privateData = await axios.get(`/network/nfts/${id}`);
-      console.log(privateData.data.data.nft_dossier.private_metadata);
+      console.log(privateData.data.data);
 
-      if(privateData.data.data.nft_dossier.private_metadata){
-        setShowRecipe(privateData.data.data.nft_dossier.private_metadata.description);
-      }
-
-      setShowRecipe(true);
+      setShowRecipe(privateData.data.data.nft_dossier.private_metadata.description);
       setLoading(false);
     } catch(err){
       console.error(err);
