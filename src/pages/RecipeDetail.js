@@ -56,7 +56,6 @@ function RecipeDetail({ walletAddress, setSBalance }) {
       console.error(err);
       setLoading(false);
     }
-   
   }
 
   return (
@@ -71,7 +70,7 @@ function RecipeDetail({ walletAddress, setSBalance }) {
               {recipe.description}
             </Card.Description>
             <div style={{marginTop: '.7rem'}}>
-              {walletAddress && <Button color='black' onClick={payToView}>
+              {(walletAddress && !showRecipe) && <Button color='black' onClick={payToView}>
                 Pay 1 SCRT to View Secret Recipe
               </Button>}
             </div>
