@@ -57,28 +57,39 @@ function RecipeDetail({ walletAddress, setSBalance }) {
   return (
     <Container className="bodyHeight">
       <h1>Recipe Detail</h1>
-      <div style={{ display: 'flex', alignItems: 'start' }}>
-        <Card color='orange'>
-          <Image src={'https://gateway.pinata.cloud/ipfs/' + recipe.image} wrapped />
-          <Card.Content>
-            <Card.Header>{recipe.name}</Card.Header>
-            <Card.Description>
-              {recipe.description}
-            </Card.Description>
-            <div style={{marginTop: '.7rem'}}>
-              {(walletAddress && !showRecipe) && <Button color='black' onClick={payToView}>
-                Pay 1 SCRT to View Secret Recipe
-              </Button>}
-            </div>
-            {loading && <Spinner text="Paying..." />}
-          </Card.Content>
-        </Card>
-        {showRecipe && <Card color='orange'>
-          <Card.Content>
-            <Card.Header>{showRecipe}</Card.Header>
-          </Card.Content>
-        </Card>}
-      </div>
+      <Grid divided='vertically'>
+        <Grid.Row columns={2}>
+          <Grid.Column mobile={16} tablet={8} computer={5}>
+            <Card color='orange'>
+              <Image src={'https://gateway.pinata.cloud/ipfs/' + recipe.image} wrapped />
+              <Card.Content>
+                <Card.Header>{recipe.name}</Card.Header>
+                <Card.Description>
+                  {recipe.description}
+                </Card.Description>
+                <div style={{marginTop: '.7rem'}}>
+                  {(walletAddress && !showRecipe) && <Button color='black' onClick={payToView}>
+                    Pay 1 SCRT to View Secret Recipe
+                  </Button>}
+                </div>
+                {loading && <Spinner text="Paying..." />}
+              </Card.Content>
+            </Card>
+          </Grid.Column>
+          <Grid.Column mobile={16} tablet={8} computer={11}>
+            {showRecipe &&
+              <Card color='orange' fluid>
+                <Card.Content>
+                  <Card.Header>Secret Recipe</Card.Header>
+                  <Card.Description>
+                    {showRecipe}
+                  </Card.Description>
+                </Card.Content>
+              </Card>
+            }
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </Container>
   );
 }
